@@ -6,12 +6,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import type { Ingredient } from '@shared/schema';
 
-export default function EditIngredientPage() {
-  const params = useParams();
-  const ingredientId = parseInt(params.id);
+export default function EditIngredientPage() {  const params = useParams();
+  const ingredientId = params.id ? parseInt(params.id) : undefined;
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  
+  if (!ingredientId) {
+    setLocation('/ingredients');
+    return null;
+  }
 
   const { data: ingredient, isLoading } = useQuery({
     queryKey: ['/api/ingredients', ingredientId],

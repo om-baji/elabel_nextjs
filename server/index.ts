@@ -122,15 +122,14 @@ app.get('/api/health', (req, res) => {
   } else {
     serveStatic(app);
   }
-
   // ALWAYS serve the app on port 5000
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = process.env.PORT || 5000;
-  const host = process.env.HOST || 'localhost';
+  const serverPort = process.env.PORT ? parseInt(process.env.PORT) : 5000;
+  const serverHost = process.env.HOST || 'localhost';
 
-  server.listen(port, host, () => {
-    console.log(`Server running at http://${host}:${port}`);
+  server.listen(serverPort, serverHost, () => {
+    console.log(`Server running at http://${serverHost}:${serverPort}`);
   });
 })();
 
