@@ -32,10 +32,8 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
-    },
+    port: 3000,
+    strictPort: false,
     proxy: {
       "/api": {
         target: "http://localhost:5000",
