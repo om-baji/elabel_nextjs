@@ -5,10 +5,7 @@ import { storage } from "./storage";
 import {
   insertProductSchema,
   insertIngredientSchema,
-  loginSchema,
-  registerSchema,
 } from "@shared/schema";
-import { AuthService } from "./auth";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -85,87 +82,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       supabaseUrl: process.env.SUPABASE_URL,
       supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
     });
-  });
-
-  // Authentication routes
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const { username, email, password } = req.body;
-      
-      // Hardcoded registration - accept any credentials
-      const mockUser = {
-        id: Math.floor(Math.random() * 1000) + 1,
-        username: username || "demo_user",
-        email: email || "demo@example.com",
-        isEmailConfirmed: true
-      };
-
-      const mockToken = "demo_token_" + Date.now();
-
-      res.status(201).json({
-        success: true,
-        user: mockUser,
-        token: mockToken,
-        message: "Registration successful"
-      });
-    } catch (error) {
-      console.error("Registration route error:", error);
-      res.status(500).json({ success: false, message: "Registration failed" });
-    }
-  });
-
-  app.post("/api/auth/login", async (req, res) => {
-    try {
-      const { email, password } = req.body;
-      
-      // Hardcoded login - accept any email/password combination
-      const mockUser = {
-        id: 1,
-        username: "demo_user",
-        email: email || "demo@example.com",
-        isEmailConfirmed: true
-      };
-
-      const mockToken = "demo_token_" + Date.now();
-
-      res.json({
-        success: true,
-        user: mockUser,
-        token: mockToken,
-        message: "Login successful"
-      });
-    } catch (error) {
-      console.error("Login route error:", error);
-      res.status(500).json({ success: false, message: "Login failed" });
-    }
-  });
-
-  app.get("/api/auth/confirm-email", async (req, res) => {
-    try {
-      const token = req.query.token as string;
-      if (!token) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Token is required" });
-      }
-
-      const authResult = await AuthService.confirmEmail(token);
-
-      if (authResult.success) {
-        // Redirect to login page with success message
-        res.redirect("/?emailConfirmed=true");
-      } else {
-        res.redirect(
-          "/?emailConfirmed=false&error=" +
-            encodeURIComponent(
-              authResult.message || "Email confirmation failed",
-            ),
-        );
-      }
-    } catch (error) {
-      console.error("Email confirmation route error:", error);
-      res.redirect("/?emailConfirmed=false&error=confirmation_failed");
-    }
   });
 
   // Products routes
@@ -486,8 +402,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to import products" });
     }
   });
-
-
 
   // Excel Import/Export routes for Ingredients
   app.post("/api/ingredients/import", uploadExcel.single('file'), async (req, res) => {

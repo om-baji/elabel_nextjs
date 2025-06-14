@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -8,8 +8,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/lib/auth';
-import { loginSchema } from '@shared/schema';
-import type { z } from 'zod';
+import { z } from 'zod';
+
+const loginSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+});
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -18,56 +21,35 @@ export default function LoginPage() {
   const { login } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: '',
-      password: '',
     },
   });
-
-  // Check for email confirmation status from URL params
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const emailConfirmed = urlParams.get('emailConfirmed');
-    const error = urlParams.get('error');
-
-    if (emailConfirmed === 'true') {
-      toast({
-        title: 'Email Confirmed!',
-        description: 'Your email has been confirmed. You can now log in.',
-      });
-    } else if (emailConfirmed === 'false' && error) {
-      toast({
-        title: 'Email Confirmation Failed',
-        description: decodeURIComponent(error),
-        variant: 'destructive',
-      });
-    }
-  }, [toast]);
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
-      // Use the form data instead of hardcoded values
-      const result = await login(data.email, data.password);
+      const result = await login(data.email);
       if (result.success) {
+        setEmailSent(true);
         toast({
-          title: 'Login successful',
-          description: 'Welcome back!',
+          title: 'Magic link sent!',
+          description: 'Please check your email for the login link.',
         });
-        setLocation('/products');
       } else {
         toast({
-          title: 'Login failed',
-          description: result.error || 'Invalid credentials',
+          title: 'Failed to send magic link',
+          description: result.error || 'Please try again',
           variant: 'destructive',
         });
       }
     } catch (error) {
       toast({
-        title: 'Login failed',
+        title: 'Error',
         description: 'An unexpected error occurred',
         variant: 'destructive',
       });
@@ -76,13 +58,42 @@ export default function LoginPage() {
     }
   };
 
+  if (emailSent) {
+    return (
+      <div className="container flex items-center justify-center min-h-screen py-12">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Check your email</CardTitle>
+            <CardDescription>
+              We've sent you a magic link to {form.getValues('email')}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Click the link in the email to log in to your account.
+              </p>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setEmailSent(false)}
+              >
+                Try a different email
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="container flex items-center justify-center min-h-screen py-12">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Sign in</CardTitle>
-          <CardDescription className="text-center">
-            Enter your email and password to access your account
+        <CardHeader>
+          <CardTitle>Login</CardTitle>
+          <CardDescription>
+            Enter your email to receive a magic link
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -105,36 +116,19 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <Button
                 type="submit"
                 className="w-full"
                 disabled={isLoading}
               >
-                {isLoading ? 'Signing in...' : 'Sign in'}
+                {isLoading ? 'Sending magic link...' : 'Send magic link'}
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
             Don't have an account?{' '}
-            <Link href="/register" className="text-blue-600 hover:text-blue-500 dark:text-blue-400">
-              Sign up
+            <Link href="/register" className="text-primary hover:underline">
+              Register
             </Link>
           </div>
         </CardContent>

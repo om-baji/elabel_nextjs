@@ -1,79 +1,57 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'wouter';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useAuth } from '@/lib/auth';
-import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
-import { Link } from 'wouter';
+import { useAuth } from '@/lib/auth';
+import { z } from 'zod';
 
 const registerSchema = z.object({
-  username: z.string().min(3, 'Username must be at least 3 characters'),
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string().min(6, 'Password must be at least 6 characters'),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
+  email: z.string().email("Please enter a valid email address"),
 });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [emailSent, setEmailSent] = useState(false);
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: '',
       email: '',
-      password: '',
-      confirmPassword: '',
     },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     try {
-      console.log('Sending registration request...'); // Debug log
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: data.username,
-          email: data.email,
-          password: data.password,
-        }),
-      });
-
-      console.log('Response status:', response.status); // Debug log
-
-      const result = await response.json();
-      console.log('Response data:', result); // Debug log
-
-      if (!response.ok) {
-        throw new Error(result.message || 'Registration failed');
+      const result = await register(data.email);
+      if (result.success) {
+        setEmailSent(true);
+        toast({
+          title: "Registration email sent!",
+          description: "Please check your email to complete registration.",
+        });
+      } else {
+        toast({
+          title: "Registration failed",
+          description: result.error || "Please try again",
+          variant: "destructive",
+        });
       }
-
-      toast({
-        title: "Registration successful!",
-        description: "Please check your email to confirm your account.",
-      });
-      setLocation('/login?registered=true');
     } catch (error: any) {
       console.error('Registration error:', error);
       toast({
         title: "Registration failed",
-        description: error.message || "Connection error - please try again",
+        description: error.message || "An unexpected error occurred",
         variant: "destructive",
       });
     } finally {
@@ -81,30 +59,47 @@ export default function RegisterPage() {
     }
   };
 
+  if (emailSent) {
+    return (
+      <div className="container flex items-center justify-center min-h-screen py-12">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>Check your email</CardTitle>
+            <CardDescription>
+              We've sent you a registration link to {form.getValues('email')}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Click the link in the email to complete your registration.
+              </p>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setEmailSent(false)}
+              >
+                Try a different email
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-md mx-auto mt-20 px-4">
-      <Card className="shadow-lg">
+    <div className="container flex items-center justify-center min-h-screen py-12">
+      <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-semibold text-gray-900">Register</CardTitle>
-          <p className="text-gray-600">Create a new account</p>
+          <CardTitle>Register</CardTitle>
+          <CardDescription>
+            Enter your email to create an account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="text" placeholder="Enter your username" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"
@@ -112,54 +107,31 @@ export default function RegisterPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input {...field} type="email" placeholder="Enter your email" />
+                      <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="password" placeholder="Enter your password" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input {...field} type="password" placeholder="Confirm your password" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <Button 
-                type="submit" 
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white"
+              <Button
+                type="submit"
+                className="w-full"
                 disabled={isLoading}
               >
-                {isLoading ? 'Creating account...' : 'Register'}
+                {isLoading ? 'Sending registration link...' : 'Send registration link'}
               </Button>
             </form>
           </Form>
-          
-          <p className="text-center text-sm text-gray-600 mt-6">
-            Already have an account? <Link href="/login" className="text-blue-600 hover:text-blue-500 dark:text-blue-400">Sign in</Link>
-          </p>
+          <div className="mt-4 text-center text-sm">
+            Already have an account?{' '}
+            <Link href="/login" className="text-primary hover:underline">
+              Login
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
