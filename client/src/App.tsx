@@ -16,15 +16,16 @@ import IngredientsPage from "@/pages/IngredientsPage";
 import CreateIngredientPage from "@/pages/CreateIngredientPage";
 import EditIngredientPage from "@/pages/EditIngredientPage";
 import EditProductPage from "@/pages/EditProductPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={LandingPage} />
+    <Switch>      <Route path="/" component={LandingPage} />
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={RegisterPage} />
       <Route path="/auth/callback" component={AuthCallbackPage} />
+      <Route path="/reset-password" component={ResetPasswordPage} />
       <Route path="/products">
         <ProtectedRoute>
           <ProductsPage />
