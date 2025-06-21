@@ -120,16 +120,67 @@ export default function LoginPage() {
     <div className="container flex items-center justify-center min-h-screen py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Choose your preferred login method</CardDescription>
+          <CardTitle>Log In</CardTitle>
+          <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="magic-link">
-            <TabsList className="grid w-full grid-cols-2">
+          <Tabs defaultValue="password">            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="password" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Log In</TabsTrigger>
               <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
-              <TabsTrigger value="password">Password</TabsTrigger>
             </TabsList>
             
+            <TabsContent value="password">
+              <Form {...passwordForm}>
+                <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
+                  <FormField
+                    control={passwordForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Enter your email" 
+                            type="email" 
+                            {...field} 
+                            disabled={isLoading}
+                            className="h-11"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={passwordForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Enter your password" 
+                            type="password" 
+                            {...field} 
+                            disabled={isLoading}
+                            className="h-11"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button 
+                    type="submit" 
+                    className="w-full h-11 text-base font-medium" 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Logging in..." : "Log in"}
+                  </Button>
+                </form>
+              </Form>
+            </TabsContent>
+
             <TabsContent value="magic-link">
               {emailSent ? (
                 <div className="text-center space-y-4">
@@ -161,6 +212,7 @@ export default function LoginPage() {
                               type="email" 
                               {...field} 
                               disabled={isLoading}
+                              className="h-11"
                             />
                           </FormControl>
                           <FormMessage />
@@ -169,7 +221,7 @@ export default function LoginPage() {
                     />
                     <Button 
                       type="submit" 
-                      className="w-full" 
+                      className="w-full h-11 text-base font-medium" 
                       disabled={isLoading}
                     >
                       {isLoading ? "Sending..." : "Send Magic Link"}
@@ -178,66 +230,19 @@ export default function LoginPage() {
                 </Form>
               )}
             </TabsContent>
-
-            <TabsContent value="password">
-              <Form {...passwordForm}>
-                <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
-                  <FormField
-                    control={passwordForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Enter your email" 
-                            type="email" 
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={passwordForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Enter your password" 
-                            type="password" 
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button 
-                    type="submit" 
-                    className="w-full" 
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Logging in..." : "Log in"}
-                  </Button>
-                </form>
-              </Form>
-            </TabsContent>
           </Tabs>
 
-          <div className="mt-4 text-center text-sm">
+          <div className="mt-6 space-y-2 text-center text-sm">
             <p className="text-muted-foreground">
               Don't have an account?{' '}
-              <Link href="/register" className="text-primary hover:underline">
+              <Link href="/register" className="text-primary hover:underline font-medium">
                 Register
               </Link>
             </p>
-            <Link href="/reset-password" className="text-primary hover:underline block mt-2">
+            <Link 
+              href="/reset-password" 
+              className="text-primary hover:underline block font-medium"
+            >
               Forgot password?
             </Link>
           </div>

@@ -132,10 +132,9 @@ export default function RegisterPage() {
           <CardDescription>Choose how you want to register</CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="magic-link">
-            <TabsList className="grid w-full grid-cols-2">
+          <Tabs defaultValue="password">            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="password" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Register</TabsTrigger>
               <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
-              <TabsTrigger value="password">Password</TabsTrigger>
             </TabsList>
             
             <TabsContent value="magic-link">
@@ -215,9 +214,12 @@ export default function RegisterPage() {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Registering..." : "Register with Password"}
+                  />                  <Button 
+                    type="submit" 
+                    className="w-full h-11 text-base font-medium" 
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Creating Account..." : "Create Account"}
                   </Button>
                 </form>
               </Form>
