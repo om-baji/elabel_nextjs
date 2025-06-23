@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import {
   insertProductSchema,
   insertIngredientSchema,
+  importProductSchema,
 } from "@shared/schema";
 import multer from "multer";
 import path from "path";
@@ -349,10 +350,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "No file uploaded" });
       }
 
+      console.log("Processing import file:", req.file.originalname);
       const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       const data = XLSX.utils.sheet_to_json(worksheet);
+
+      console.log(`Found ${data.length} rows to process`);
+      console.log("Available sheets:", workbook.SheetNames);
+      console.log("Using sheet:", sheetName);
+      console.log("Sample row data:", data[0]);
+      console.log("All column names from first row:", Object.keys(data[0] || {}));
 
       const importedProducts = [];
       const errors = [];
@@ -361,16 +369,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           const row = data[i] as any;
           
+          // Skip empty rows
+          if (!row || Object.keys(row).length === 0 || Object.values(row).every(val => !val)) {
+            console.log(`Skipping empty row ${i + 2}`);
+            continue;
+          }
+          
           // Map Excel columns to product fields - specific fields only
           const productData = {
-            name: row.name || row.Name || row.NAME,
-            netVolume: row.netVolume || row['Net Volume'] || row.NET_VOLUME || row.netvolume,
-            vintage: row.vintage || row.Vintage || row.VINTAGE,
-            wineType: row.wineType || row['Wine Type'] || row.Type || row.type || row.WINE_TYPE || row.winetype,
-            sugarContent: row.sugarContent || row['Sugar Content'] || row.SUGAR_CONTENT || row.sugarcontent,
-            appellation: row.appellation || row.Appellation || row.APPELLATION,
-            sku: row.sku || row.SKU
+            name: row.name || row.Name || row.NAME || row['Product Name'] || row['product name'],
+            netVolume: row.netVolume || row['Net Volume'] || row.NET_VOLUME || row.netvolume || row['Volume'] || row.volume,
+            vintage: row.vintage || row.Vintage || row.VINTAGE || row['Year'] || row.year,
+            wineType: row.wineType || row['Wine Type'] || row.Type || row.type || row.WINE_TYPE || row.winetype || row['Wine Category'] || row['wine category'],
+            sugarContent: row.sugarContent || row['Sugar Content'] || row.SUGAR_CONTENT || row.sugarcontent || row['Sugar'] || row.sugar,
+            appellation: row.appellation || row.Appellation || row.APPELLATION || row['Region'] || row.region,
+            sku: row.sku || row.SKU || row['Product Code'] || row['product code']
           };
+
+          console.log(`Processing row ${i + 2}:`, productData);
+          console.log(`Raw row data:`, row);
 
           // Validate required fields
           if (!productData.name) {
@@ -378,18 +395,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
             continue;
           }
 
-          const result = insertProductSchema.safeParse(productData);
+          const result = importProductSchema.safeParse(productData);
           if (!result.success) {
+            console.log(`Validation failed for row ${i + 2}:`, result.error.errors);
             errors.push(`Row ${i + 2}: ${result.error.errors.map(e => e.message).join(', ')}`);
             continue;
           }
 
           const product = await storage.createProduct(result.data);
           importedProducts.push(product);
+          console.log(`Successfully imported product: ${product.name}`);
         } catch (error) {
+          console.error(`Error processing row ${i + 2}:`, error);
           errors.push(`Row ${i + 2}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
+
+      console.log(`Import completed. Imported: ${importedProducts.length}, Errors: ${errors.length}`);
 
       res.json({
         success: true,
@@ -421,6 +443,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       for (let i = 0; i < data.length; i++) {
         try {
           const row = data[i] as any;
+          
+          // Skip empty rows
+          if (!row || Object.keys(row).length === 0 || Object.values(row).every(val => !val)) {
+            console.log(`Skipping empty row ${i + 2}`);
+            continue;
+          }
           
           // Map Excel columns to ingredient fields
           const ingredientData = {

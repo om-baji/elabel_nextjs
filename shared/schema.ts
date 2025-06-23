@@ -86,6 +86,37 @@ export const insertProductSchema = createInsertSchema(products).omit({
   updatedAt: true,
 });
 
+export const importProductSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  brand: z.string().optional(),
+  netVolume: z.string().optional(),
+  vintage: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  wineType: z.string().optional(),
+  sugarContent: z.string().optional(),
+  appellation: z.string().optional(),
+  alcoholContent: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  packagingGases: z.string().optional(),
+  portionSize: z.string().optional(),
+  kcal: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  kj: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  fat: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  carbohydrates: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  organic: z.boolean().default(false),
+  vegetarian: z.boolean().default(false),
+  vegan: z.boolean().default(false),
+  operatorType: z.string().optional(),
+  operatorName: z.string().optional(),
+  operatorAddress: z.string().optional(),
+  operatorInfo: z.string().optional(),
+  countryOfOrigin: z.string().optional(),
+  sku: z.union([z.string(), z.number()]).transform(val => String(val)).optional(),
+  ean: z.string().optional(),
+  externalLink: z.string().optional(),
+  redirectLink: z.string().optional(),
+  imageUrl: z.string().optional(),
+  createdBy: z.number().optional(),
+});
+
 export const insertIngredientSchema = createInsertSchema(ingredients).omit({
   id: true,
   createdAt: true,
