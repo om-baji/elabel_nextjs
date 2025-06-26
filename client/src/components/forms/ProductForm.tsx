@@ -5,8 +5,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { wineTypeOptions, operatorTypeOptions } from '@/lib/mock-data';
 import { insertProductSchema } from '@shared/schema';
@@ -22,43 +35,50 @@ interface ProductFormProps {
   isLoading?: boolean;
 }
 
-export default function ProductForm({ product, onSubmit, onCancel, isLoading = false }: ProductFormProps) {
+export default function ProductForm({
+  product,
+  onSubmit,
+  onCancel,
+  isLoading = false,
+}: ProductFormProps) {
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productFormSchema),
-    defaultValues: product ? {
-      name: product.name,
-      brand: product.brand || undefined,
-      netVolume: product.netVolume || undefined,
-      vintage: product.vintage || undefined,
-      wineType: product.wineType || undefined,
-      sugarContent: product.sugarContent || undefined,
-      appellation: product.appellation || undefined,
-      alcoholContent: product.alcoholContent || undefined,
-      countryOfOrigin: product.countryOfOrigin || undefined,
-      sku: product.sku || undefined,
-      ean: product.ean || undefined,
-      packagingGases: product.packagingGases || undefined,
-      portionSize: product.portionSize || undefined,
-      kcal: product.kcal || undefined,
-      kj: product.kj || undefined,
-      fat: product.fat || undefined,
-      carbohydrates: product.carbohydrates || undefined,
-      organic: product.organic || false,
-      vegetarian: product.vegetarian || false,
-      vegan: product.vegan || false,
-      operatorType: product.operatorType || undefined,
-      operatorName: product.operatorName || undefined,
-      operatorAddress: product.operatorAddress || undefined,
-      operatorInfo: product.operatorInfo || undefined,
-      externalLink: product.externalLink || undefined,
-      redirectLink: product.redirectLink || undefined,
-      createdBy: product.createdBy || undefined,
-    } : {
-      name: '',
-      organic: false,
-      vegetarian: false,
-      vegan: false,
-    },
+    defaultValues: product
+      ? {
+          name: product.name,
+          brand: product.brand || undefined,
+          netVolume: product.netVolume || undefined,
+          vintage: product.vintage || undefined,
+          wineType: product.wineType || undefined,
+          sugarContent: product.sugarContent || undefined,
+          appellation: product.appellation || undefined,
+          alcoholContent: product.alcoholContent || undefined,
+          countryOfOrigin: product.countryOfOrigin || undefined,
+          sku: product.sku || undefined,
+          ean: product.ean || undefined,
+          packagingGases: product.packagingGases || undefined,
+          portionSize: product.portionSize || undefined,
+          kcal: product.kcal || undefined,
+          kj: product.kj || undefined,
+          fat: product.fat || undefined,
+          carbohydrates: product.carbohydrates || undefined,
+          organic: product.organic || false,
+          vegetarian: product.vegetarian || false,
+          vegan: product.vegan || false,
+          operatorType: product.operatorType || undefined,
+          operatorName: product.operatorName || undefined,
+          operatorAddress: product.operatorAddress || undefined,
+          operatorInfo: product.operatorInfo || undefined,
+          externalLink: product.externalLink || undefined,
+          redirectLink: product.redirectLink || undefined,
+          createdBy: product.createdBy || undefined,
+        }
+      : {
+          name: '',
+          organic: false,
+          vegetarian: false,
+          vegan: false,
+        },
   });
 
   return (
@@ -167,7 +187,10 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading = f
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Wine Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value || undefined}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value || undefined}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select wine type" />
@@ -352,10 +375,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading = f
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                       <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                       <div className="space-y-1 leading-none">
                         <FormLabel>Organic</FormLabel>
@@ -369,10 +389,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading = f
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                       <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                       <div className="space-y-1 leading-none">
                         <FormLabel>Vegetarian</FormLabel>
@@ -386,10 +403,7 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading = f
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                       <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                       <div className="space-y-1 leading-none">
                         <FormLabel>Vegan</FormLabel>
@@ -414,7 +428,10 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading = f
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Operator Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value || undefined}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value || undefined}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select operator type" />
@@ -453,7 +470,11 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading = f
                   <FormItem>
                     <FormLabel>Operator Address</FormLabel>
                     <FormControl>
-                      <Textarea {...field} placeholder="Full business address..." className="h-20" />
+                      <Textarea
+                        {...field}
+                        placeholder="Full business address..."
+                        className="h-20"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -466,7 +487,11 @@ export default function ProductForm({ product, onSubmit, onCancel, isLoading = f
                   <FormItem>
                     <FormLabel>Additional Operator Information</FormLabel>
                     <FormControl>
-                      <Textarea {...field} placeholder="Additional business information..." className="h-20" />
+                      <Textarea
+                        {...field}
+                        placeholder="Additional business information..."
+                        className="h-20"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

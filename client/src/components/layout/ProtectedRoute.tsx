@@ -16,9 +16,9 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     if (!isAuthenticated) {
       setLocation('/login');
       toast({
-        title: "Authentication required",
-        description: "Please login to access this page.",
-        variant: "destructive",
+        title: 'Authentication required',
+        description: 'Please login to access this page.',
+        variant: 'destructive',
       });
     }
   }, [isAuthenticated, setLocation, toast]);

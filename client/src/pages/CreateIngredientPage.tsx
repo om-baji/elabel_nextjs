@@ -14,16 +14,16 @@ export default function CreateIngredientPage() {
     onSuccess: (newIngredient) => {
       queryClient.invalidateQueries({ queryKey: ['/api/ingredients'] });
       toast({
-        title: "Ingredient created successfully!",
+        title: 'Ingredient created successfully!',
         description: `${newIngredient.name} has been added to your ingredients database.`,
       });
       setLocation('/ingredients');
     },
     onError: () => {
       toast({
-        title: "Error creating ingredient",
-        description: "Please try again.",
-        variant: "destructive",
+        title: 'Error creating ingredient',
+        description: 'Please try again.',
+        variant: 'destructive',
       });
     },
   });
@@ -43,8 +43,8 @@ export default function CreateIngredientPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Create New Ingredient</h1>
         <p className="text-gray-600">Add a new ingredient to your database</p>
       </div>
-      
-      <IngredientForm 
+
+      <IngredientForm
         onSubmit={handleSubmit}
         onCancel={handleCancel}
         isLoading={createIngredientMutation.isPending}

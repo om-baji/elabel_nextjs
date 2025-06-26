@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import express, { type Request, Response, NextFunction } from 'express';
+import { registerRoutes } from './routes';
+import { setupVite, serveStatic, log } from './vite';
 import bcrypt from 'bcrypt';
 import db from './db';
 import cors from 'cors';
@@ -10,10 +10,12 @@ import { Pool } from 'pg';
 const app = express();
 
 // Move CORS middleware to the top
-app.use(cors({
-  origin: true, // Allow all origins in development
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: true, // Allow all origins in development
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -29,16 +31,16 @@ app.use((req, res, next) => {
     return originalResJson.apply(res, [bodyJson, ...args]);
   };
 
-  res.on("finish", () => {
+  res.on('finish', () => {
     const duration = Date.now() - start;
-    if (path.startsWith("/api")) {
+    if (path.startsWith('/api')) {
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
       if (capturedJsonResponse) {
         logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
       }
 
       if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
+        logLine = logLine.slice(0, 79) + '…';
       }
 
       log(logLine);
@@ -51,24 +53,21 @@ app.use((req, res, next) => {
 app.post('/api/auth/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    
+
     if (!username || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: 'All fields are required'
+        message: 'All fields are required',
       });
     }
 
     // Check if user already exists
-    const existingUser = await db.query(
-      'SELECT * FROM users WHERE email = $1',
-      [email]
-    );
+    const existingUser = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
     if (existingUser.rows.length > 0) {
       return res.status(400).json({
         success: false,
-        message: 'User already exists'
+        message: 'User already exists',
       });
     }
 
@@ -78,7 +77,7 @@ app.post('/api/auth/register', async (req, res) => {
     // Insert new user
     const newUser = await db.query(
       'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id, email, username',
-      [username, email, hashedPassword]
+      [username, email, hashedPassword],
     );
 
     return res.status(201).json({
@@ -87,14 +86,14 @@ app.post('/api/auth/register', async (req, res) => {
       user: {
         id: newUser.rows[0].id,
         email: newUser.rows[0].email,
-        username: newUser.rows[0].username
-      }
+        username: newUser.rows[0].username,
+      },
     });
   } catch (error) {
     console.error('Registration error:', error);
     return res.status(500).json({
       success: false,
-      message: 'Internal server error'
+      message: 'Internal server error',
     });
   }
 });
@@ -109,7 +108,7 @@ app.get('/api/health', (req, res) => {
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+    const message = err.message || 'Internal Server Error';
 
     res.status(status).json({ message });
     throw err;
@@ -118,7 +117,7 @@ app.get('/api/health', (req, res) => {
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
+  if (app.get('env') === 'development') {
     await setupVite(app, server);
   } else {
     serveStatic(app);

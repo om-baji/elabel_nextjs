@@ -10,7 +10,9 @@ export interface Profile {
   updated_at: string;
 }
 
-export type ProfileUpdate = Partial<Omit<Profile, 'id' | 'email' | 'role' | 'created_at' | 'updated_at'>>;
+export type ProfileUpdate = Partial<
+  Omit<Profile, 'id' | 'email' | 'role' | 'created_at' | 'updated_at'>
+>;
 
 export type UserWithProfile = {
   id: string;

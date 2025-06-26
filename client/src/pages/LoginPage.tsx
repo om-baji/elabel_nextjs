@@ -5,19 +5,26 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/lib/auth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { z } from 'zod';
 
 const magicLinkSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email('Please enter a valid email address'),
 });
 
 const passwordSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
 type MagicLinkFormData = z.infer<typeof magicLinkSchema>;
@@ -50,7 +57,7 @@ export default function LoginPage() {
     try {
       console.log('Attempting magic link login for:', data.email);
       const result = await loginWithMagicLink(data.email);
-      
+
       if (result.success) {
         setEmailSent(true);
         toast({
@@ -124,11 +131,17 @@ export default function LoginPage() {
           <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="password">            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="password" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Log In</TabsTrigger>
+          <Tabs defaultValue="password">
+            {' '}
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger
+                value="password"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                Log In
+              </TabsTrigger>
               <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
             </TabsList>
-            
             <TabsContent value="password">
               <Form {...passwordForm}>
                 <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
@@ -139,10 +152,10 @@ export default function LoginPage() {
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Enter your email" 
-                            type="email" 
-                            {...field} 
+                          <Input
+                            placeholder="Enter your email"
+                            type="email"
+                            {...field}
                             disabled={isLoading}
                             className="h-11"
                           />
@@ -158,10 +171,10 @@ export default function LoginPage() {
                       <FormItem>
                         <FormLabel>Password</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="Enter your password" 
-                            type="password" 
-                            {...field} 
+                          <Input
+                            placeholder="Enter your password"
+                            type="password"
+                            {...field}
                             disabled={isLoading}
                             className="h-11"
                           />
@@ -170,36 +183,34 @@ export default function LoginPage() {
                       </FormItem>
                     )}
                   />
-                  <Button 
-                    type="submit" 
-                    className="w-full h-11 text-base font-medium" 
+                  <Button
+                    type="submit"
+                    className="w-full h-11 text-base font-medium"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Logging in..." : "Log in"}
+                    {isLoading ? 'Logging in...' : 'Log in'}
                   </Button>
                 </form>
               </Form>
             </TabsContent>
-
             <TabsContent value="magic-link">
               {emailSent ? (
                 <div className="text-center space-y-4">
                   <h3 className="text-lg font-medium">Check your email</h3>
                   <p className="text-muted-foreground">
-                    We've sent you a magic link to log in.
-                    If you don't see it, check your spam folder.
+                    We've sent you a magic link to log in. If you don't see it, check your spam
+                    folder.
                   </p>
-                  <Button
-                    variant="outline"
-                    className="mt-4"
-                    onClick={() => setEmailSent(false)}
-                  >
+                  <Button variant="outline" className="mt-4" onClick={() => setEmailSent(false)}>
                     Try again
                   </Button>
                 </div>
               ) : (
                 <Form {...magicLinkForm}>
-                  <form onSubmit={magicLinkForm.handleSubmit(onMagicLinkSubmit)} className="space-y-4">
+                  <form
+                    onSubmit={magicLinkForm.handleSubmit(onMagicLinkSubmit)}
+                    className="space-y-4"
+                  >
                     <FormField
                       control={magicLinkForm.control}
                       name="email"
@@ -207,10 +218,10 @@ export default function LoginPage() {
                         <FormItem>
                           <FormLabel>Email</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="Enter your email" 
-                              type="email" 
-                              {...field} 
+                            <Input
+                              placeholder="Enter your email"
+                              type="email"
+                              {...field}
                               disabled={isLoading}
                               className="h-11"
                             />
@@ -219,12 +230,12 @@ export default function LoginPage() {
                         </FormItem>
                       )}
                     />
-                    <Button 
-                      type="submit" 
-                      className="w-full h-11 text-base font-medium" 
+                    <Button
+                      type="submit"
+                      className="w-full h-11 text-base font-medium"
                       disabled={isLoading}
                     >
-                      {isLoading ? "Sending..." : "Send Magic Link"}
+                      {isLoading ? 'Sending...' : 'Send Magic Link'}
                     </Button>
                   </form>
                 </Form>
@@ -239,10 +250,7 @@ export default function LoginPage() {
                 Register
               </Link>
             </p>
-            <Link 
-              href="/reset-password" 
-              className="text-primary hover:underline block font-medium"
-            >
+            <Link href="/reset-password" className="text-primary hover:underline block font-medium">
               Forgot password?
             </Link>
           </div>

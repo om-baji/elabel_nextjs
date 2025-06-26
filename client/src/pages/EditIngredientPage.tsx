@@ -6,12 +6,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import type { Ingredient } from '@shared/schema';
 
-export default function EditIngredientPage() {  const params = useParams();
+export default function EditIngredientPage() {
+  const params = useParams();
   const ingredientId = params.id ? parseInt(params.id) : undefined;
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
+
   if (!ingredientId) {
     setLocation('/ingredients');
     return null;
@@ -28,21 +29,22 @@ export default function EditIngredientPage() {  const params = useParams();
   });
 
   const updateIngredientMutation = useMutation({
-    mutationFn: (data: any) => apiRequest(`/api/ingredients/${ingredientId}`, { method: 'PUT', data }),
+    mutationFn: (data: any) =>
+      apiRequest(`/api/ingredients/${ingredientId}`, { method: 'PUT', data }),
     onSuccess: (updatedIngredient) => {
       queryClient.invalidateQueries({ queryKey: ['/api/ingredients'] });
       queryClient.invalidateQueries({ queryKey: ['/api/ingredients', ingredientId] });
       toast({
-        title: "Ingredient updated successfully!",
+        title: 'Ingredient updated successfully!',
         description: `${updatedIngredient.name} has been updated.`,
       });
       setLocation('/ingredients');
     },
     onError: () => {
       toast({
-        title: "Error updating ingredient",
-        description: "Please try again.",
-        variant: "destructive",
+        title: 'Error updating ingredient',
+        description: 'Please try again.',
+        variant: 'destructive',
       });
     },
   });
@@ -82,8 +84,8 @@ export default function EditIngredientPage() {  const params = useParams();
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Edit Ingredient</h1>
         <p className="text-gray-600">Update ingredient information</p>
       </div>
-      
-      <IngredientForm 
+
+      <IngredientForm
         ingredient={ingredient}
         onSubmit={handleSubmit}
         onCancel={handleCancel}

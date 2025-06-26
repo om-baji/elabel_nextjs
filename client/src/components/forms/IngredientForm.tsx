@@ -5,8 +5,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { categoryOptions, allergenOptions } from '@/lib/mock-data';
 import type { Ingredient } from '@shared/schema';
@@ -28,22 +41,29 @@ interface IngredientFormProps {
   isLoading?: boolean;
 }
 
-export default function IngredientForm({ ingredient, onSubmit, onCancel, isLoading = false }: IngredientFormProps) {
+export default function IngredientForm({
+  ingredient,
+  onSubmit,
+  onCancel,
+  isLoading = false,
+}: IngredientFormProps) {
   const form = useForm<IngredientFormData>({
     resolver: zodResolver(ingredientFormSchema),
-    defaultValues: ingredient ? {
-      name: ingredient.name,
-      category: ingredient.category || '',
-      eNumber: ingredient.eNumber || '',
-      details: ingredient.details || '',
-      allergens: ingredient.allergens || [],
-    } : {
-      name: '',
-      category: '',
-      eNumber: '',
-      details: '',
-      allergens: [],
-    },
+    defaultValues: ingredient
+      ? {
+          name: ingredient.name,
+          category: ingredient.category || '',
+          eNumber: ingredient.eNumber || '',
+          details: ingredient.details || '',
+          allergens: ingredient.allergens || [],
+        }
+      : {
+          name: '',
+          category: '',
+          eNumber: '',
+          details: '',
+          allergens: [],
+        },
   });
 
   const allergens = form.watch('allergens');
@@ -52,7 +72,10 @@ export default function IngredientForm({ ingredient, onSubmit, onCancel, isLoadi
     if (checked) {
       form.setValue('allergens', [...allergens, allergen]);
     } else {
-      form.setValue('allergens', allergens.filter(a => a !== allergen));
+      form.setValue(
+        'allergens',
+        allergens.filter((a) => a !== allergen),
+      );
     }
   };
 
@@ -78,7 +101,7 @@ export default function IngredientForm({ ingredient, onSubmit, onCancel, isLoadi
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="category"
@@ -103,7 +126,7 @@ export default function IngredientForm({ ingredient, onSubmit, onCancel, isLoadi
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="eNumber"
@@ -117,7 +140,7 @@ export default function IngredientForm({ ingredient, onSubmit, onCancel, isLoadi
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="details"
@@ -125,7 +148,11 @@ export default function IngredientForm({ ingredient, onSubmit, onCancel, isLoadi
                 <FormItem>
                   <FormLabel>Other Ingredient Details</FormLabel>
                   <FormControl>
-                    <Textarea {...field} placeholder="Additional details about the ingredient..." className="h-24" />
+                    <Textarea
+                      {...field}
+                      placeholder="Additional details about the ingredient..."
+                      className="h-24"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,7 +173,9 @@ export default function IngredientForm({ ingredient, onSubmit, onCancel, isLoadi
                   <Checkbox
                     id={allergen}
                     checked={allergens.includes(allergen)}
-                    onCheckedChange={(checked) => handleAllergenChange(allergen, checked as boolean)}
+                    onCheckedChange={(checked) =>
+                      handleAllergenChange(allergen, checked as boolean)
+                    }
                   />
                   <label
                     htmlFor={allergen}

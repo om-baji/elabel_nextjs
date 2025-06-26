@@ -13,8 +13,8 @@ export default function Navigation() {
     logout();
     setLocation('/');
     toast({
-      title: "Logged out successfully",
-      description: "You have been signed out of your account.",
+      title: 'Logged out successfully',
+      description: 'You have been signed out of your account.',
     });
   };
 
@@ -28,9 +28,9 @@ export default function Navigation() {
     if (isProtected && !isAuthenticated) {
       setLocation('/login');
       toast({
-        title: "Authentication required",
-        description: "Please login to access this page.",
-        variant: "destructive",
+        title: 'Authentication required',
+        description: 'Please login to access this page.',
+        variant: 'destructive',
       });
       return;
     }
@@ -48,7 +48,7 @@ export default function Navigation() {
             </div>
             <span className="text-xl font-semibold text-gray-900">Elabel</span>
           </div>
-          
+
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
@@ -63,14 +63,12 @@ export default function Navigation() {
               </button>
             ))}
           </div>
-          
+
           {/* User Menu */}
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <>
-                <span className="text-sm text-gray-600 hidden sm:block">
-                  Welcome, {user?.id}
-                </span>
+                <span className="text-sm text-gray-600 hidden sm:block">Welcome, {user?.id}</span>
                 <Button
                   variant="ghost"
                   size="sm"

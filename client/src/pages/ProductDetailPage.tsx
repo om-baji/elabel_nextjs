@@ -34,39 +34,39 @@ export default function ProductDetailPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
       toast({
-        title: "Product deleted",
-        description: "Product has been successfully deleted",
+        title: 'Product deleted',
+        description: 'Product has been successfully deleted',
       });
       setLocation('/products');
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to delete product",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to delete product',
+        variant: 'destructive',
       });
     },
   });
 
   const duplicateProductMutation = useMutation({
-    mutationFn: (productData: any) => 
-      apiRequest('/api/products', { 
+    mutationFn: (productData: any) =>
+      apiRequest('/api/products', {
         method: 'POST',
-        data: { ...productData, name: `${productData.name} (Copy)` }
+        data: { ...productData, name: `${productData.name} (Copy)` },
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
       toast({
-        title: "Product duplicated",
-        description: "Product has been successfully duplicated",
+        title: 'Product duplicated',
+        description: 'Product has been successfully duplicated',
       });
       setLocation('/products');
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to duplicate product",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to duplicate product',
+        variant: 'destructive',
       });
     },
   });
@@ -75,30 +75,30 @@ export default function ProductDetailPage() {
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append('image', file);
-      
+
       const response = await fetch(`/api/products/${params?.id}/image`, {
         method: 'POST',
         body: formData,
       });
-      
+
       if (!response.ok) {
         throw new Error('Upload failed');
       }
-      
+
       return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/products', params?.id] });
       toast({
-        title: "Image uploaded",
-        description: "Product image has been uploaded successfully",
+        title: 'Image uploaded',
+        description: 'Product image has been uploaded successfully',
       });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to upload image",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to upload image',
+        variant: 'destructive',
       });
     },
   });
@@ -108,15 +108,15 @@ export default function ProductDetailPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/products', params?.id] });
       toast({
-        title: "Image deleted",
-        description: "Product image has been deleted successfully",
+        title: 'Image deleted',
+        description: 'Product image has been deleted successfully',
       });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to delete image",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to delete image',
+        variant: 'destructive',
       });
     },
   });
@@ -152,16 +152,16 @@ export default function ProductDetailPage() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       toast({
-        title: "QR Code Downloaded",
-        description: "QR code has been downloaded successfully",
+        title: 'QR Code Downloaded',
+        description: 'QR code has been downloaded successfully',
       });
     } else {
       toast({
-        title: "No External Link",
-        description: "Please add an external link to generate QR code",
-        variant: "destructive",
+        title: 'No External Link',
+        description: 'Please add an external link to generate QR code',
+        variant: 'destructive',
       });
     }
   };
@@ -169,8 +169,8 @@ export default function ProductDetailPage() {
   const handleCopyLink = (link: string) => {
     navigator.clipboard.writeText(link);
     toast({
-      title: "Link copied",
-      description: "Link has been copied to clipboard",
+      title: 'Link copied',
+      description: 'Link has been copied to clipboard',
     });
   };
 
@@ -208,11 +208,7 @@ export default function ProductDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Product not found</h1>
-          <Button 
-            onClick={() => setLocation('/products')}
-            className="mt-4"
-            variant="outline"
-          >
+          <Button onClick={() => setLocation('/products')} className="mt-4" variant="outline">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Products
           </Button>
@@ -225,7 +221,7 @@ export default function ProductDetailPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header with Action Buttons */}
       <div className="flex items-center justify-between mb-8">
-        <Button 
+        <Button
           onClick={() => setLocation('/products')}
           variant="ghost"
           className="text-gray-600 hover:text-primary"
@@ -233,7 +229,7 @@ export default function ProductDetailPage() {
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Products
         </Button>
-        
+
         <div className="flex items-center space-x-2">
           <Button onClick={() => setShowPreview(true)} variant="outline">
             <Eye className="w-4 h-4 mr-2" />
@@ -273,7 +269,9 @@ export default function ProductDetailPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Product Name
+                  </label>
                   <p className="text-gray-900">{product.name}</p>
                 </div>
                 <div>
@@ -293,19 +291,27 @@ export default function ProductDetailPage() {
                   <p className="text-gray-900">{product.wineType || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Sugar Content</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Sugar Content
+                  </label>
                   <p className="text-gray-900">{product.sugarContent || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Appellation</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Appellation
+                  </label>
                   <p className="text-gray-900">{product.appellation || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Alcohol Content</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Alcohol Content
+                  </label>
                   <p className="text-gray-900">{product.alcoholContent || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Country of Origin</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Country of Origin
+                  </label>
                   <p className="text-gray-900">{product.countryOfOrigin || 'Not specified'}</p>
                 </div>
                 <div>
@@ -317,7 +323,9 @@ export default function ProductDetailPage() {
                   <p className="text-gray-900">{product.ean || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Packaging Gases</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Packaging Gases
+                  </label>
                   <p className="text-gray-900">{product.packagingGases || 'Not specified'}</p>
                 </div>
               </div>
@@ -335,8 +343,8 @@ export default function ProductDetailPage() {
               <div className="space-y-4">
                 <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
                   {product.imageUrl ? (
-                    <img 
-                      src={product.imageUrl} 
+                    <img
+                      src={product.imageUrl}
                       alt={product.name}
                       className="w-full h-full object-cover"
                     />
@@ -352,8 +360,8 @@ export default function ProductDetailPage() {
                     onChange={handleFileChange}
                     className="hidden"
                   />
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={handleImageUpload}
                     disabled={uploadImageMutation.isPending}
                   >
@@ -361,7 +369,7 @@ export default function ProductDetailPage() {
                     {product.imageUrl ? 'Change Image' : 'Upload Image'}
                   </Button>
                   {product.imageUrl && (
-                    <Button 
+                    <Button
                       variant="destructive"
                       onClick={handleDeleteImage}
                       disabled={deleteImageMutation.isPending}
@@ -377,7 +385,8 @@ export default function ProductDetailPage() {
                   </p>
                 )}
                 <p className="text-sm text-gray-500">
-                  Supported formats: JPG, PNG. Recommended dimensions: 1000x750px. Max file size: 5MB
+                  Supported formats: JPG, PNG. Recommended dimensions: 1000x750px. Max file size:
+                  5MB
                 </p>
               </div>
             </CardContent>
@@ -393,15 +402,21 @@ export default function ProductDetailPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Portion Size</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Portion Size
+                  </label>
                   <p className="text-gray-900">{product.portionSize || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Energy (kcal)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Energy (kcal)
+                  </label>
                   <p className="text-gray-900">{product.kcal || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Energy (kJ)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Energy (kJ)
+                  </label>
                   <p className="text-gray-900">{product.kj || 'Not specified'}</p>
                 </div>
                 <div>
@@ -409,7 +424,9 @@ export default function ProductDetailPage() {
                   <p className="text-gray-900">{product.fat || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Carbohydrates</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Carbohydrates
+                  </label>
                   <p className="text-gray-900">{product.carbohydrates || 'Not specified'}</p>
                 </div>
               </div>
@@ -425,9 +442,21 @@ export default function ProductDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {product.organic && <Badge variant="secondary" className="bg-green-100 text-green-800">Organic</Badge>}
-                {product.vegetarian && <Badge variant="secondary" className="bg-green-100 text-green-800">Vegetarian</Badge>}
-                {product.vegan && <Badge variant="secondary" className="bg-green-100 text-green-800">Vegan</Badge>}
+                {product.organic && (
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    Organic
+                  </Badge>
+                )}
+                {product.vegetarian && (
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    Vegetarian
+                  </Badge>
+                )}
+                {product.vegan && (
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    Vegan
+                  </Badge>
+                )}
                 {!product.organic && !product.vegetarian && !product.vegan && (
                   <span className="text-gray-500">No certifications specified</span>
                 )}
@@ -445,11 +474,15 @@ export default function ProductDetailPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Operator Type</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Operator Type
+                  </label>
                   <p className="text-gray-900">{product.operatorType || 'Not specified'}</p>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Operator Name</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Operator Name
+                  </label>
                   <p className="text-gray-900">{product.operatorName || 'Not specified'}</p>
                 </div>
                 <div className="md:col-span-2">
@@ -457,7 +490,9 @@ export default function ProductDetailPage() {
                   <p className="text-gray-900">{product.operatorAddress || 'Not specified'}</p>
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Additional Information</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Additional Information
+                  </label>
                   <p className="text-gray-900">{product.operatorInfo || 'Not specified'}</p>
                 </div>
               </div>
@@ -476,24 +511,26 @@ export default function ProductDetailPage() {
                 {/* QR Code Display */}
                 <div className="text-center">
                   {product.externalLink ? (
-                    <img 
+                    <img
                       src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(product.externalLink)}`}
-                      alt="QR Code for product" 
-                      className="w-48 h-48 mx-auto border rounded-lg" 
+                      alt="QR Code for product"
+                      className="w-48 h-48 mx-auto border rounded-lg"
                     />
                   ) : (
                     <div className="w-48 h-48 mx-auto border rounded-lg bg-gray-100 flex items-center justify-center">
                       <span className="text-gray-500">No QR Code Available</span>
                     </div>
                   )}
-                  <p className="text-sm text-gray-600 mt-2">
-                    QR Code generated from External Link
-                  </p>
+                  <p className="text-sm text-gray-600 mt-2">QR Code generated from External Link</p>
                 </div>
 
                 {/* Download QR Code */}
                 <div className="text-center">
-                  <Button onClick={generateQRCode} variant="outline" disabled={!product.externalLink}>
+                  <Button
+                    onClick={generateQRCode}
+                    variant="outline"
+                    disabled={!product.externalLink}
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Download QR Code
                   </Button>
@@ -501,16 +538,18 @@ export default function ProductDetailPage() {
 
                 {/* External Link */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">External Link</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    External Link
+                  </label>
                   <div className="flex items-center space-x-2">
-                    <Input 
-                      value={product.externalLink || 'No external link specified'} 
-                      readOnly 
+                    <Input
+                      value={product.externalLink || 'No external link specified'}
+                      readOnly
                       className="flex-1 text-sm bg-gray-50"
                     />
                     {product.externalLink && (
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         onClick={() => handleCopyLink(product.externalLink!)}
                       >
@@ -522,16 +561,18 @@ export default function ProductDetailPage() {
 
                 {/* Redirect Link */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Redirect Link</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Redirect Link
+                  </label>
                   <div className="flex items-center space-x-2">
-                    <Input 
-                      value={product.redirectLink || 'No redirect link specified'} 
-                      readOnly 
+                    <Input
+                      value={product.redirectLink || 'No redirect link specified'}
+                      readOnly
                       className="flex-1 text-sm bg-gray-50"
                     />
                     {product.redirectLink && (
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         onClick={() => handleCopyLink(product.redirectLink!)}
                       >
@@ -551,7 +592,8 @@ export default function ProductDetailPage() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600 mb-4">
-                Edit all product details including images, information, ingredients, nutrition, certifications, and FBO details.
+                Edit all product details including images, information, ingredients, nutrition,
+                certifications, and FBO details.
               </p>
               <Button onClick={handleEditProduct} className="w-full">
                 <Edit className="w-4 h-4 mr-2" />
@@ -563,13 +605,13 @@ export default function ProductDetailPage() {
       </Tabs>
 
       {/* Modals */}
-      <ProductPreviewModal 
+      <ProductPreviewModal
         product={product}
         isOpen={showPreview}
         onClose={() => setShowPreview(false)}
       />
-      
-      <DeleteConfirmationModal 
+
+      <DeleteConfirmationModal
         product={product}
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}

@@ -22,7 +22,7 @@ export default function IngredientsPage() {
       const response = await fetch('/api/ingredients');
       if (!response.ok) throw new Error('Failed to fetch ingredients');
       return response.json() as Promise<Ingredient[]>;
-    }
+    },
   });
 
   const deleteIngredientMutation = useMutation({
@@ -30,15 +30,15 @@ export default function IngredientsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/ingredients'] });
       toast({
-        title: "Ingredient deleted successfully",
-        description: "The ingredient has been removed from your inventory.",
+        title: 'Ingredient deleted successfully',
+        description: 'The ingredient has been removed from your inventory.',
       });
     },
     onError: () => {
       toast({
-        title: "Error deleting ingredient",
-        description: "Please try again.",
-        variant: "destructive",
+        title: 'Error deleting ingredient',
+        description: 'Please try again.',
+        variant: 'destructive',
       });
     },
   });
@@ -57,15 +57,15 @@ export default function IngredientsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/ingredients'] });
       toast({
-        title: "Ingredient duplicated successfully",
-        description: "A copy has been created.",
+        title: 'Ingredient duplicated successfully',
+        description: 'A copy has been created.',
       });
     },
     onError: () => {
       toast({
-        title: "Error duplicating ingredient",
-        description: "Please try again.",
-        variant: "destructive",
+        title: 'Error duplicating ingredient',
+        description: 'Please try again.',
+        variant: 'destructive',
       });
     },
   });
@@ -77,29 +77,29 @@ export default function IngredientsPage() {
       return fetch('/api/ingredients/import', {
         method: 'POST',
         body: formData,
-      }).then(res => res.json());
+      }).then((res) => res.json());
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/ingredients'] });
       toast({
-        title: "Import completed",
+        title: 'Import completed',
         description: `Imported ${data.imported} ingredients${data.errors.length > 0 ? ` with ${data.errors.length} errors` : ''}`,
       });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to import ingredients",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to import ingredients',
+        variant: 'destructive',
       });
     },
   });
 
   const exportIngredientsMutation = useMutation({
-    mutationFn: () => 
+    mutationFn: () =>
       fetch('/api/ingredients/export')
-        .then(res => res.blob())
-        .then(blob => {
+        .then((res) => res.blob())
+        .then((blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
@@ -111,23 +111,24 @@ export default function IngredientsPage() {
         }),
     onSuccess: () => {
       toast({
-        title: "Export completed",
-        description: "Ingredients exported successfully",
+        title: 'Export completed',
+        description: 'Ingredients exported successfully',
       });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to export ingredients",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to export ingredients',
+        variant: 'destructive',
       });
     },
   });
 
-  const filteredIngredients = ingredients.filter(ingredient =>
-    ingredient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    ingredient.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    ingredient.eNumber?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredIngredients = ingredients.filter(
+    (ingredient) =>
+      ingredient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ingredient.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      ingredient.eNumber?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleEdit = (ingredient: Ingredient) => {
@@ -168,11 +169,11 @@ export default function IngredientsPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Ingredients</h1>
         <p className="text-gray-600">Manage ingredients and allergen information</p>
       </div>
-      
+
       {/* Actions Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex flex-wrap gap-3">
-          <Button 
+          <Button
             onClick={() => setLocation('/ingredients/create')}
             className="bg-accent hover:bg-accent/90 text-white font-medium"
           >
@@ -188,7 +189,7 @@ export default function IngredientsPage() {
             Export
           </Button>
         </div>
-        
+
         <div className="relative w-full sm:w-auto">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
@@ -199,9 +200,9 @@ export default function IngredientsPage() {
           />
         </div>
       </div>
-      
+
       {/* Ingredients Table */}
-      <IngredientsTable 
+      <IngredientsTable
         ingredients={filteredIngredients}
         onEdit={handleEdit}
         onDelete={handleDelete}

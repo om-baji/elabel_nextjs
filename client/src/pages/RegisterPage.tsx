@@ -5,29 +5,39 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/lib/auth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { z } from 'zod';
 
 const magicLinkSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email('Please enter a valid email address'),
 });
 
-const passwordSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const passwordSchema = z
+  .object({
+    email: z.string().email('Please enter a valid email address'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .regex(/[0-9]/, 'Password must contain at least one number')
+      .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
 
 type MagicLinkFormData = z.infer<typeof magicLinkSchema>;
 type PasswordFormData = z.infer<typeof passwordSchema>;
@@ -86,19 +96,20 @@ export default function RegisterPage() {
   const onPasswordSubmit = async (data: PasswordFormData) => {
     setIsLoading(true);
     try {
-      console.log('Starting registration process with:', { 
+      console.log('Starting registration process with:', {
         email: data.email,
         passwordLength: data.password.length,
-        passwordValid: passwordSchema.safeParse(data).success
+        passwordValid: passwordSchema.safeParse(data).success,
       });
 
       const result = await register(data.email, data.password);
       console.log('Registration result:', result);
-      
+
       if (result.success) {
         toast({
           title: 'Registration successful! 🎉',
-          description: 'Please check your email to verify your account. If you don\'t see it, check your spam folder.',
+          description:
+            "Please check your email to verify your account. If you don't see it, check your spam folder.",
           duration: 6000,
         });
         setLocation('/login');
@@ -132,11 +143,17 @@ export default function RegisterPage() {
           <CardDescription>Choose how you want to register</CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="password">            <TabsList className="grid w-full grid-cols-2 mb-4">
-              <TabsTrigger value="password" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Register</TabsTrigger>
+          <Tabs defaultValue="password">
+            {' '}
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger
+                value="password"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                Register
+              </TabsTrigger>
               <TabsTrigger value="magic-link">Magic Link</TabsTrigger>
             </TabsList>
-            
             <TabsContent value="magic-link">
               {emailSent ? (
                 <div className="text-center space-y-4">
@@ -147,7 +164,10 @@ export default function RegisterPage() {
                 </div>
               ) : (
                 <Form {...magicLinkForm}>
-                  <form onSubmit={magicLinkForm.handleSubmit(onMagicLinkSubmit)} className="space-y-4">
+                  <form
+                    onSubmit={magicLinkForm.handleSubmit(onMagicLinkSubmit)}
+                    className="space-y-4"
+                  >
                     <FormField
                       control={magicLinkForm.control}
                       name="email"
@@ -162,13 +182,12 @@ export default function RegisterPage() {
                       )}
                     />
                     <Button type="submit" className="w-full" disabled={isLoading}>
-                      {isLoading ? "Sending..." : "Register with Magic Link"}
+                      {isLoading ? 'Sending...' : 'Register with Magic Link'}
                     </Button>
                   </form>
                 </Form>
               )}
             </TabsContent>
-
             <TabsContent value="password">
               <Form {...passwordForm}>
                 <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
@@ -196,8 +215,8 @@ export default function RegisterPage() {
                         </FormControl>
                         <FormMessage />
                         <p className="text-sm text-muted-foreground">
-                          Password must contain at least 8 characters, one uppercase letter,
-                          one lowercase letter, one number, and one special character.
+                          Password must contain at least 8 characters, one uppercase letter, one
+                          lowercase letter, one number, and one special character.
                         </p>
                       </FormItem>
                     )}
@@ -214,12 +233,13 @@ export default function RegisterPage() {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />                  <Button 
-                    type="submit" 
-                    className="w-full h-11 text-base font-medium" 
+                  />{' '}
+                  <Button
+                    type="submit"
+                    className="w-full h-11 text-base font-medium"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Creating Account..." : "Create Account"}
+                    {isLoading ? 'Creating Account...' : 'Create Account'}
                   </Button>
                 </form>
               </Form>

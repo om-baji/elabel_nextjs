@@ -1,8 +1,20 @@
 import { useState } from 'react';
 import { Eye, Edit, MoreVertical, Copy, Trash2, FileText, QrCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { useLocation } from 'wouter';
 import type { Product } from '@shared/schema';
 
@@ -14,7 +26,13 @@ interface ProductsTableProps {
   onPreview?: (product: Product) => void;
 }
 
-export default function ProductsTable({ products, onEdit, onDelete, onDuplicate, onPreview }: ProductsTableProps) {
+export default function ProductsTable({
+  products,
+  onEdit,
+  onDelete,
+  onDuplicate,
+  onPreview,
+}: ProductsTableProps) {
   const [, setLocation] = useLocation();
 
   const handleViewDetails = (productId: number) => {
@@ -26,15 +44,33 @@ export default function ProductsTable({ products, onEdit, onDelete, onDuplicate,
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-50 border-b border-gray-200">
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">Image</TableHead>
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">Name</TableHead>
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">Net Volume</TableHead>
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">Vintage</TableHead>
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">Type</TableHead>
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">Sugar Content</TableHead>
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">Appellation</TableHead>
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">SKU</TableHead>
-            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">Actions</TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              Image
+            </TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              Name
+            </TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              Net Volume
+            </TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              Vintage
+            </TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              Type
+            </TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              Sugar Content
+            </TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              Appellation
+            </TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              SKU
+            </TableHead>
+            <TableHead className="text-left px-6 py-4 text-sm font-semibold text-gray-900">
+              Actions
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody className="divide-y divide-gray-200">
@@ -43,8 +79,8 @@ export default function ProductsTable({ products, onEdit, onDelete, onDuplicate,
               <TableCell className="px-6 py-4">
                 <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
                   {product.imageUrl ? (
-                    <img 
-                      src={product.imageUrl} 
+                    <img
+                      src={product.imageUrl}
                       alt={product.name}
                       className="w-full h-full object-cover"
                     />
@@ -59,8 +95,12 @@ export default function ProductsTable({ products, onEdit, onDelete, onDuplicate,
               <TableCell className="px-6 py-4 text-gray-600">{product.netVolume || '-'}</TableCell>
               <TableCell className="px-6 py-4 text-gray-600">{product.vintage || '-'}</TableCell>
               <TableCell className="px-6 py-4 text-gray-600">{product.wineType || '-'}</TableCell>
-              <TableCell className="px-6 py-4 text-gray-600">{product.sugarContent || '-'}</TableCell>
-              <TableCell className="px-6 py-4 text-gray-600">{product.appellation || '-'}</TableCell>
+              <TableCell className="px-6 py-4 text-gray-600">
+                {product.sugarContent || '-'}
+              </TableCell>
+              <TableCell className="px-6 py-4 text-gray-600">
+                {product.appellation || '-'}
+              </TableCell>
               <TableCell className="px-6 py-4 text-gray-600">{product.sku || '-'}</TableCell>
               <TableCell className="px-6 py-4">
                 <div className="flex items-center space-x-2">
@@ -99,7 +139,10 @@ export default function ProductsTable({ products, onEdit, onDelete, onDuplicate,
                         <Edit className="w-4 h-4 mr-2" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => onDelete?.(product)} className="text-red-600 focus:text-red-600">
+                      <DropdownMenuItem
+                        onClick={() => onDelete?.(product)}
+                        className="text-red-600 focus:text-red-600"
+                      >
                         <Trash2 className="w-4 h-4 mr-2" />
                         Delete
                       </DropdownMenuItem>

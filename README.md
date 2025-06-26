@@ -30,12 +30,14 @@ A full-stack web application for managing wine products and ingredients with imp
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd wine-inventory
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -47,6 +49,7 @@ A full-stack web application for managing wine products and ingredients with imp
 4. **Environment Configuration**
    - Copy `.env.example` to `.env`
    - Update the environment variables with your local settings:
+
    ```
    DATABASE_URL=postgresql://postgres:password@localhost:5432/wine_inventory
    JWT_SECRET=your-secret-key
@@ -56,6 +59,7 @@ A full-stack web application for managing wine products and ingredients with imp
    ```
 
 5. **Database Migration**
+
    ```bash
    npm run db:push
    ```
@@ -96,11 +100,13 @@ The application will be available at `http://localhost:5000`
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/login` - User login
 - `POST /api/auth/register` - User registration
 - `GET /api/auth/confirm-email` - Email confirmation
 
 ### Products
+
 - `GET /api/products` - Get all products
 - `GET /api/products/:id` - Get single product
 - `POST /api/products` - Create new product
@@ -112,6 +118,7 @@ The application will be available at `http://localhost:5000`
 - `POST /api/products/import` - Import products from Excel
 
 ### Ingredients
+
 - `GET /api/ingredients` - Get all ingredients
 - `GET /api/ingredients/:id` - Get single ingredient
 - `POST /api/ingredients` - Create new ingredient
@@ -123,6 +130,7 @@ The application will be available at `http://localhost:5000`
 ## Database Schema
 
 ### Products Table
+
 - `id` - Primary key
 - `name` - Product name
 - `brand` - Brand name (optional)
@@ -135,6 +143,7 @@ The application will be available at `http://localhost:5000`
 - `imageUrl` - Product image path
 
 ### Ingredients Table
+
 - `id` - Primary key
 - `name` - Ingredient name
 - `category` - Ingredient category
@@ -143,6 +152,7 @@ The application will be available at `http://localhost:5000`
 - `details` - Additional details
 
 ### Users Table
+
 - `id` - Primary key
 - `username` - User's username
 - `email` - User's email
@@ -153,7 +163,9 @@ The application will be available at `http://localhost:5000`
 ## Import/Export Format
 
 ### Products Excel Format
+
 Required columns:
+
 - `Name` - Product name
 - `Net Volume` - Volume information
 - `Vintage` - Vintage year
@@ -163,7 +175,9 @@ Required columns:
 - `SKU` - Stock keeping unit
 
 ### Ingredients Excel Format
+
 Required columns:
+
 - `Name` - Ingredient name
 - `Category` - Category
 - `E Number` - E-number

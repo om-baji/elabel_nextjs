@@ -9,7 +9,10 @@ interface AuthState {
   profile: Profile | null;
   isAuthenticated: boolean;
   loginWithMagicLink: (email: string) => Promise<{ success: boolean; error?: string }>;
-  loginWithPassword: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  loginWithPassword: (
+    email: string,
+    password: string,
+  ) => Promise<{ success: boolean; error?: string }>;
   register: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   resetPassword: (email: string) => Promise<{ success: boolean; error?: string }>;
   updatePassword: (password: string) => Promise<{ success: boolean; error?: string }>;
@@ -49,7 +52,7 @@ export const useAuth = create<AuthState>()(
       loginWithPassword: async (email: string, password: string) => {
         try {
           console.log('Attempting password login for:', email);
-          
+
           const { data, error } = await supabase.auth.signInWithPassword({
             email,
             password,
@@ -58,7 +61,7 @@ export const useAuth = create<AuthState>()(
           console.log('Login response:', {
             session: data?.session ? 'Session created' : 'No session',
             user: data?.user ? 'User found' : 'No user',
-            error: error?.message || 'No error'
+            error: error?.message || 'No error',
           });
 
           if (error) {
@@ -72,9 +75,9 @@ export const useAuth = create<AuthState>()(
           }
 
           // Set the user in the store
-          set({ 
-            user: data.user, 
-            isAuthenticated: true 
+          set({
+            user: data.user,
+            isAuthenticated: true,
           });
 
           // Fetch the user's profile
@@ -89,7 +92,7 @@ export const useAuth = create<AuthState>()(
       register: async (email: string, password: string) => {
         try {
           console.log('Starting registration process for:', email);
-          
+
           // Attempt to sign up the user
           const { data, error } = await supabase.auth.signUp({
             email,
@@ -104,7 +107,7 @@ export const useAuth = create<AuthState>()(
 
           console.log('Registration response:', {
             user: data?.user?.id ? 'User created' : 'No user created',
-            error: error?.message || 'No error'
+            error: error?.message || 'No error',
           });
 
           if (error) {
@@ -115,9 +118,9 @@ export const useAuth = create<AuthState>()(
           // Verify user was created
           if (!data?.user?.id) {
             console.error('No user ID returned from registration');
-            return { 
-              success: false, 
-              error: 'Failed to create user account' 
+            return {
+              success: false,
+              error: 'Failed to create user account',
             };
           }
 
@@ -126,15 +129,15 @@ export const useAuth = create<AuthState>()(
             id: data.user.id,
             email: data.user.email,
             emailConfirmed: data.user.email_confirmed_at,
-            createdAt: data.user.created_at
+            createdAt: data.user.created_at,
           });
 
           return { success: true };
         } catch (error: any) {
           console.error('Registration error:', error);
-          return { 
-            success: false, 
-            error: error.message || 'Registration failed' 
+          return {
+            success: false,
+            error: error.message || 'Registration failed',
           };
         }
       },
@@ -182,9 +185,9 @@ export const useAuth = create<AuthState>()(
           return { success: true };
         } catch (error: any) {
           console.error('Profile update error:', error);
-          return { 
-            success: false, 
-            error: error.message || 'Failed to update profile' 
+          return {
+            success: false,
+            error: error.message || 'Failed to update profile',
           };
         }
       },
@@ -260,6 +263,6 @@ export const useAuth = create<AuthState>()(
           }
         },
       },
-    }
-  )
+    },
+  ),
 );

@@ -32,16 +32,16 @@ export default function EditProductPage() {
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
       queryClient.invalidateQueries({ queryKey: ['/api/products', productId] });
       toast({
-        title: "Product updated",
-        description: "Product has been successfully updated",
+        title: 'Product updated',
+        description: 'Product has been successfully updated',
       });
       setLocation('/products');
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to update product",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to update product',
+        variant: 'destructive',
       });
     },
   });
@@ -90,8 +90,8 @@ export default function EditProductPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-4 mb-4">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => setLocation('/products')}
             className="flex items-center gap-2"
           >

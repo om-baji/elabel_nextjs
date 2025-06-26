@@ -1,4 +1,10 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle } from 'lucide-react';
 import type { Product } from '@shared/schema';
@@ -11,12 +17,12 @@ interface DeleteConfirmationModalProps {
   isLoading?: boolean;
 }
 
-export default function DeleteConfirmationModal({ 
-  product, 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  isLoading = false 
+export default function DeleteConfirmationModal({
+  product,
+  isOpen,
+  onClose,
+  onConfirm,
+  isLoading = false,
 }: DeleteConfirmationModalProps) {
   if (!product) return null;
 
@@ -34,28 +40,20 @@ export default function DeleteConfirmationModal({
             </div>
           </div>
         </DialogHeader>
-        
+
         <div className="py-4">
           <p className="text-gray-700">
-            Are you sure you want to delete <span className="font-semibold">"{product.name}"</span>? 
-            This will permanently remove all product data including nutrition information, 
+            Are you sure you want to delete <span className="font-semibold">"{product.name}"</span>?
+            This will permanently remove all product data including nutrition information,
             ingredients, and certifications.
           </p>
         </div>
 
         <DialogFooter className="gap-2">
-          <Button 
-            variant="outline" 
-            onClick={onClose}
-            disabled={isLoading}
-          >
+          <Button variant="outline" onClick={onClose} disabled={isLoading}>
             Cancel
           </Button>
-          <Button 
-            variant="destructive" 
-            onClick={onConfirm}
-            disabled={isLoading}
-          >
+          <Button variant="destructive" onClick={onConfirm} disabled={isLoading}>
             {isLoading ? 'Deleting...' : 'Delete Product'}
           </Button>
         </DialogFooter>

@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Create Product Page', () => {
-  
   test.beforeEach(async ({ page }) => {
     // Go to the create product page
     await page.goto('/products/new');
@@ -38,8 +37,8 @@ test.describe('Create Product Page', () => {
 
   test('should show error toast on API failure', async ({ page }) => {
     // Simulate API failure by intercepting network request
-    await page.route('/api/products', route => 
-      route.fulfill({ status: 500, body: 'Internal Server Error' })
+    await page.route('/api/products', (route) =>
+      route.fulfill({ status: 500, body: 'Internal Server Error' }),
     );
 
     await page.getByLabel(/product name/i).fill('Fail Wine');

@@ -12,8 +12,11 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
         if (error) {
           throw error;
         }
@@ -50,4 +53,4 @@ export default function AuthCallbackPage() {
       </div>
     </div>
   );
-} 
+}

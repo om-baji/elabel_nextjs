@@ -9,7 +9,11 @@ interface ProductPreviewModalProps {
   onClose: () => void;
 }
 
-export default function ProductPreviewModal({ product, isOpen, onClose }: ProductPreviewModalProps) {
+export default function ProductPreviewModal({
+  product,
+  isOpen,
+  onClose,
+}: ProductPreviewModalProps) {
   if (!product) return null;
 
   return (
@@ -18,13 +22,13 @@ export default function ProductPreviewModal({ product, isOpen, onClose }: Produc
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">{product.name}</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           {/* Product Image */}
           <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
             {product.imageUrl ? (
-              <img 
-                src={product.imageUrl} 
+              <img
+                src={product.imageUrl}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
@@ -62,7 +66,7 @@ export default function ProductPreviewModal({ product, isOpen, onClose }: Produc
               <div>
                 <h4 className="font-medium mb-2">Energy</h4>
                 <p className="text-sm text-gray-600">
-                  {product.kcal ? `${product.kcal} kcal` : 'Not specified'} 
+                  {product.kcal ? `${product.kcal} kcal` : 'Not specified'}
                   {product.kj && ` / ${product.kj} kJ`}
                 </p>
               </div>
@@ -120,7 +124,9 @@ export default function ProductPreviewModal({ product, isOpen, onClose }: Produc
               </div>
               <div>
                 <h4 className="font-medium">Address</h4>
-                <p className="text-sm text-gray-600">{product.operatorAddress || 'Not specified'}</p>
+                <p className="text-sm text-gray-600">
+                  {product.operatorAddress || 'Not specified'}
+                </p>
               </div>
               <div>
                 <h4 className="font-medium">Additional Info</h4>
@@ -137,7 +143,9 @@ export default function ProductPreviewModal({ product, isOpen, onClose }: Produc
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <h4 className="font-medium mb-2">Country of Origin</h4>
-                <p className="text-sm text-gray-600">{product.countryOfOrigin || 'Not specified'}</p>
+                <p className="text-sm text-gray-600">
+                  {product.countryOfOrigin || 'Not specified'}
+                </p>
               </div>
               <div>
                 <h4 className="font-medium mb-2">Appellation</h4>

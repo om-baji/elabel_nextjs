@@ -4,14 +4,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/lib/auth';
 import { Link } from 'wouter';
 import { z } from 'zod';
 
 const resetSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email('Please enter a valid email address'),
 });
 
 type ResetFormData = z.infer<typeof resetSchema>;
@@ -76,14 +83,10 @@ export default function ResetPasswordPage() {
             <div className="text-center space-y-4">
               <h3 className="text-lg font-medium">Check your email</h3>
               <p className="text-muted-foreground">
-                We've sent you instructions to reset your password.
-                If you don't see the email, check your spam folder.
+                We've sent you instructions to reset your password. If you don't see the email,
+                check your spam folder.
               </p>
-              <Button
-                variant="outline"
-                className="mt-4"
-                onClick={() => setEmailSent(false)}
-              >
+              <Button variant="outline" className="mt-4" onClick={() => setEmailSent(false)}>
                 Try again
               </Button>
               <Link href="/login" className="text-primary hover:underline block mt-4">
@@ -100,10 +103,10 @@ export default function ResetPasswordPage() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="Enter your email" 
-                          type="email" 
-                          {...field} 
+                        <Input
+                          placeholder="Enter your email"
+                          type="email"
+                          {...field}
                           disabled={isLoading}
                         />
                       </FormControl>
@@ -111,12 +114,8 @@ export default function ResetPasswordPage() {
                     </FormItem>
                   )}
                 />
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Sending..." : "Send Reset Link"}
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? 'Sending...' : 'Send Reset Link'}
                 </Button>
 
                 <div className="text-center mt-4">

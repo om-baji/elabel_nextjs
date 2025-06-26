@@ -1,7 +1,17 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { eq } from 'drizzle-orm';
-import { users, products, ingredients, type User, type InsertUser, type Product, type InsertProduct, type Ingredient, type InsertIngredient } from "@shared/schema";
+import {
+  users,
+  products,
+  ingredients,
+  type User,
+  type InsertUser,
+  type Product,
+  type InsertProduct,
+  type Ingredient,
+  type InsertIngredient,
+} from '@shared/schema';
 
 const connectionString = process.env.DATABASE_URL!;
 const client = postgres(connectionString);
@@ -14,19 +24,22 @@ export interface IStorage {
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, updates: Partial<User>): Promise<User | undefined>;
-  
+
   // Product methods
   getProducts(): Promise<Product[]>;
   getProduct(id: number): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: number, product: Partial<InsertProduct>): Promise<Product | undefined>;
   deleteProduct(id: number): Promise<boolean>;
-  
+
   // Ingredient methods
   getIngredients(): Promise<Ingredient[]>;
   getIngredient(id: number): Promise<Ingredient | undefined>;
   createIngredient(ingredient: InsertIngredient): Promise<Ingredient>;
-  updateIngredient(id: number, ingredient: Partial<InsertIngredient>): Promise<Ingredient | undefined>;
+  updateIngredient(
+    id: number,
+    ingredient: Partial<InsertIngredient>,
+  ): Promise<Ingredient | undefined>;
   deleteIngredient(id: number): Promise<boolean>;
 }
 
@@ -97,8 +110,15 @@ export class DatabaseStorage implements IStorage {
     return result[0];
   }
 
-  async updateIngredient(id: number, ingredient: Partial<InsertIngredient>): Promise<Ingredient | undefined> {
-    const result = await db.update(ingredients).set(ingredient).where(eq(ingredients.id, id)).returning();
+  async updateIngredient(
+    id: number,
+    ingredient: Partial<InsertIngredient>,
+  ): Promise<Ingredient | undefined> {
+    const result = await db
+      .update(ingredients)
+      .set(ingredient)
+      .where(eq(ingredients.id, id))
+      .returning();
     return result[0];
   }
 

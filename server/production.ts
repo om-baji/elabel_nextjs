@@ -21,15 +21,15 @@ app.use(express.static(publicDir));
 
 // Handle client-side routing
 app.get('*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!req.url.startsWith('/api')) {
-        console.log('Serving index.html for:', req.url);
-        res.sendFile(path.join(publicDir, 'index.html'));
-    } else {
-        next();
-    }
+  if (!req.url.startsWith('/api')) {
+    console.log('Serving index.html for:', req.url);
+    res.sendFile(path.join(publicDir, 'index.html'));
+  } else {
+    next();
+  }
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-    console.log(`Serving static files from: ${publicDir}`);
+  console.log(`Server is running on port ${port}`);
+  console.log(`Serving static files from: ${publicDir}`);
 });

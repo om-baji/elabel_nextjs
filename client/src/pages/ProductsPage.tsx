@@ -31,39 +31,39 @@ export default function ProductsPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
       toast({
-        title: "Product deleted",
-        description: "Product has been successfully deleted",
+        title: 'Product deleted',
+        description: 'Product has been successfully deleted',
       });
       setShowDeleteModal(false);
       setSelectedProduct(null);
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to delete product",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to delete product',
+        variant: 'destructive',
       });
     },
   });
 
   const duplicateProductMutation = useMutation({
-    mutationFn: (productData: any) => 
-      apiRequest('/api/products', { 
+    mutationFn: (productData: any) =>
+      apiRequest('/api/products', {
         method: 'POST',
-        data: { ...productData, name: `${productData.name} (Copy)` }
+        data: { ...productData, name: `${productData.name} (Copy)` },
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
       toast({
-        title: "Product duplicated",
-        description: "Product has been successfully duplicated",
+        title: 'Product duplicated',
+        description: 'Product has been successfully duplicated',
       });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to duplicate product",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to duplicate product',
+        variant: 'destructive',
       });
     },
   });
@@ -75,29 +75,29 @@ export default function ProductsPage() {
       return fetch('/api/products/import', {
         method: 'POST',
         body: formData,
-      }).then(res => res.json());
+      }).then((res) => res.json());
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/products'] });
       toast({
-        title: "Import completed",
+        title: 'Import completed',
         description: `Imported ${data.imported} products${data.errors.length > 0 ? ` with ${data.errors.length} errors` : ''}`,
       });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to import products",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to import products',
+        variant: 'destructive',
       });
     },
   });
 
   const exportProductsMutation = useMutation({
-    mutationFn: () => 
+    mutationFn: () =>
       fetch('/api/products/export')
-        .then(res => res.blob())
-        .then(blob => {
+        .then((res) => res.blob())
+        .then((blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
@@ -109,23 +109,24 @@ export default function ProductsPage() {
         }),
     onSuccess: () => {
       toast({
-        title: "Export completed",
-        description: "Products exported successfully",
+        title: 'Export completed',
+        description: 'Products exported successfully',
       });
     },
     onError: () => {
       toast({
-        title: "Error",
-        description: "Failed to export products",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to export products',
+        variant: 'destructive',
       });
     },
   });
 
-  const filteredProducts = products.filter((product: Product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.sku?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = products.filter(
+    (product: Product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.sku?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleEdit = (product: Product) => {
@@ -179,11 +180,11 @@ export default function ProductsPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Products</h1>
         <p className="text-gray-600">Manage your product inventory and details</p>
       </div>
-      
+
       {/* Actions Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div className="flex flex-wrap gap-3">
-          <Button 
+          <Button
             onClick={() => setLocation('/products/create')}
             className="bg-primary hover:bg-primary/90 text-white font-medium"
           >
@@ -199,7 +200,7 @@ export default function ProductsPage() {
             Export
           </Button>
         </div>
-        
+
         <div className="relative w-full sm:w-auto">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
@@ -210,9 +211,9 @@ export default function ProductsPage() {
           />
         </div>
       </div>
-      
+
       {/* Products Table */}
-      <ProductsTable 
+      <ProductsTable
         products={filteredProducts}
         onEdit={handleEdit}
         onDelete={handleDelete}
@@ -230,13 +231,13 @@ export default function ProductsPage() {
       />
 
       {/* Modals */}
-      <ProductPreviewModal 
+      <ProductPreviewModal
         product={selectedProduct}
         isOpen={showPreview}
         onClose={() => setShowPreview(false)}
       />
-      
-      <DeleteConfirmationModal 
+
+      <DeleteConfirmationModal
         product={selectedProduct}
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
