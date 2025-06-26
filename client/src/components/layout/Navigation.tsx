@@ -68,7 +68,7 @@ export default function Navigation() {
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (
               <>
-                <span className="text-sm text-gray-600 hidden sm:block">Welcome, {user?.id}</span>
+                <span className="text-sm text-gray-600 hidden sm:block">Welcome, {user?.email || user?.id}</span>
                 <Button
                   variant="ghost"
                   size="sm"
