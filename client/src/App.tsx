@@ -18,15 +18,6 @@ import EditIngredientPage from '@/pages/EditIngredientPage';
 import EditProductPage from '@/pages/EditProductPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import NotFound from '@/pages/not-found';
-<button
-      onClick={() => {
-        // This will throw an error and Sentry will catch it
-        throw new Error("Sentry test error!");
-      }}
-      style={{ margin: 16, padding: 8, background: "#f44336", color: "#fff" }}
-    >
-      Trigger Sentry Error
-    </button>
 
 function Router() {
   return (
