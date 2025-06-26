@@ -82,3 +82,6 @@ temp/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Sentry Config File
+.env.sentry-build-plugin

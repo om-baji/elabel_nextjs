@@ -6,6 +6,14 @@ import bcrypt from 'bcrypt';
 import db from './db';
 import cors from 'cors';
 import { Pool } from 'pg';
+import * as Sentry from '@sentry/node';
+import '@sentry/tracing';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN || '<YOUR_SENTRY_DSN>',
+  tracesSampleRate: 1.0,
+  environment: process.env.NODE_ENV || 'development',
+});
 
 const app = express();
 
@@ -101,6 +109,11 @@ app.post('/api/auth/register', async (req, res) => {
 // Add health check route
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+// Test route to trigger a Sentry error
+app.get('/api/sentry-test', (req, res) => {
+  throw new Error('Sentry test error!');
 });
 
 (async () => {
