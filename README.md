@@ -56,6 +56,8 @@ A full-stack web application for managing wine products and ingredients with imp
    EMAIL_USER=your-email@gmail.com
    EMAIL_PASS=your-app-password
    BASE_URL=http://localhost:5000
+   VITE_SUPABASE_URL=https://supase-xurl
+   VITE_SUPABASE_ANON_KEY=your-supabase-key
    ```
 
 5. **Database Migration**
