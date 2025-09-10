@@ -15,7 +15,8 @@ A full-stack web application for managing wine products and ingredients with imp
 
 - **Frontend**: React, TypeScript, Tailwind CSS, Vite
 - **Backend**: Express.js, Node.js
-- **Database**: PostgreSQL with Drizzle ORM
+- **Database**: Supabase (PostgreSQL) with Drizzle ORM
+- **Authentication**: Supabase Auth
 - **File Upload**: Multer for image handling
 - **Excel Processing**: XLSX library for import/export
 
@@ -25,7 +26,9 @@ A full-stack web application for managing wine products and ingredients with imp
 
 - Node.js (v18 or higher)
 - PostgreSQL database
+- Supabase account (for database and authentication)
 - npm or yarn package manager
+- Sentry account (optional, for error monitoring)
 
 ### Installation
 
@@ -33,7 +36,7 @@ A full-stack web application for managing wine products and ingredients with imp
 
    ```bash
    git clone <repository-url>
-   cd wine-inventory
+   cd elabel_nextjs
    ```
 
 2. **Install dependencies**
@@ -42,13 +45,9 @@ A full-stack web application for managing wine products and ingredients with imp
    npm install
    ```
 
-3. **Database Setup**
-   - Create a PostgreSQL database named `wine_inventory`
-   - Update the `DATABASE_URL` in `.env` file with your database credentials
-
-4. **Environment Configuration**
+3. **Environment Configuration**
    - Copy `.env.example` to `.env`
-   - Update the environment variables with your local settings:
+   - Update the environment variables with your settings:
 
    ```
    DATABASE_URL=postgresql://postgres:password@localhost:5432/wine_inventory
@@ -56,7 +55,26 @@ A full-stack web application for managing wine products and ingredients with imp
    EMAIL_USER=your-email@gmail.com
    EMAIL_PASS=your-app-password
    BASE_URL=http://localhost:5000
+
+   # Supabase Configuration
+   SUPABASE_URL=https://your-project-id.supabase.co
+   SUPABASE_ANON_KEY=your_supabase_public_anon_key
+
+   # Frontend Environment Variables
+   VITE_SUPABASE_URL=https://your-project-id.supabase.co
+   VITE_SUPABASE_ANON_KEY=your_supabase_public_anon_key
+
+   # Sentry Configuration (Optional)
+   VITE_SENTRY_DSN=https://your-public-key@your-org-id.ingest.sentry.io/project-id
+   SENTRY_AUTH_TOKEN=your_sentry_auth_token_here
+
+   # Node Environment
+   NODE_ENV=development
    ```
+
+4. **Database Setup**
+   - Set up your Supabase project and get the connection details
+   - Update the `DATABASE_URL` in `.env` file with your database credentials
 
 5. **Database Migration**
 
@@ -75,26 +93,48 @@ The application will be available at `http://localhost:5000`
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run check` - Run TypeScript type checking
 - `npm run db:push` - Push database schema changes
-- `npm run db:studio` - Open Drizzle Studio for database management
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm test` - Run tests (Playwright)
 
 ## Project Structure
 
 ```
-├── client/               # Frontend React application
+├── client/                 # Frontend React application
 │   ├── src/
-│   │   ├── components/   # Reusable UI components
-│   │   ├── pages/        # Application pages
-│   │   ├── lib/          # Utilities and configurations
-│   │   └── hooks/        # Custom React hooks
-├── server/               # Backend Express application
-│   ├── auth.ts          # Authentication logic
-│   ├── routes.ts        # API routes
-│   ├── storage.ts       # Database operations
-│   └── index.ts         # Server entry point
-├── shared/               # Shared types and schemas
-│   └── schema.ts        # Database schema definitions
-└── uploads/             # File upload directory
+│   │   ├── components/     # Reusable UI components
+│   │   │   ├── forms/      # Form components
+│   │   │   ├── layout/     # Layout components
+│   │   │   ├── modals/     # Modal components
+│   │   │   ├── tables/     # Table components
+│   │   │   └── ui/         # Base UI components (Radix UI)
+│   │   ├── pages/          # Application pages
+│   │   ├── lib/            # Utilities and configurations
+│   │   ├── hooks/          # Custom React hooks
+│   │   └── types/          # TypeScript type definitions
+├── server/                 # Backend Express application
+│   ├── auth.ts            # Authentication logic
+│   ├── routes.ts          # API routes
+│   ├── storage.ts         # Database operations
+│   ├── index.ts           # Server entry point
+│   ├── production.ts      # Production server configuration
+│   ├── vite.ts            # Vite integration
+│   └── db/                # Database setup and migrations
+├── shared/                 # Shared types and schemas
+│   ├── schema.ts          # Database schema definitions
+│   └── supabase.ts        # Supabase configuration
+├── tests/                  # Playwright tests
+├── tests-examples/         # Test examples
+├── uploads/               # File upload directory
+└── Configuration files
+    ├── components.json     # UI components configuration
+    ├── drizzle.config.ts   # Database configuration
+    ├── playwright.config.ts # Testing configuration
+    ├── tailwind.config.ts  # Tailwind CSS configuration
+    └── vite.config.ts      # Vite configuration
 ```
 
 ## API Endpoints
@@ -139,8 +179,29 @@ The application will be available at `http://localhost:5000`
 - `wineType` - Type of wine
 - `sugarContent` - Sugar content level
 - `appellation` - Wine appellation
+- `alcoholContent` - Alcohol percentage
+- `packagingGases` - Packaging gases used
+- `portionSize` - Serving portion size
+- `kcal` - Calories per portion
+- `kj` - Kilojoules per portion
+- `fat` - Fat content
+- `carbohydrates` - Carbohydrate content
+- `organic` - Organic certification status
+- `vegetarian` - Vegetarian-friendly status
+- `vegan` - Vegan-friendly status
+- `operatorType` - Type of food business operator
+- `operatorName` - Name of the operator
+- `operatorAddress` - Operator's address
+- `operatorInfo` - Additional operator information
+- `countryOfOrigin` - Country of origin
 - `sku` - Stock keeping unit
+- `ean` - European Article Number
+- `externalLink` - External product link
+- `redirectLink` - Redirect URL
 - `imageUrl` - Product image path
+- `createdAt` - Creation timestamp
+- `updatedAt` - Last update timestamp
+- `createdBy` - User who created the record
 
 ### Ingredients Table
 
@@ -150,6 +211,9 @@ The application will be available at `http://localhost:5000`
 - `eNumber` - E-number identifier
 - `allergens` - Array of allergens
 - `details` - Additional details
+- `createdAt` - Creation timestamp
+- `updatedAt` - Last update timestamp
+- `createdBy` - User who created the record
 
 ### Users Table
 
@@ -159,25 +223,44 @@ The application will be available at `http://localhost:5000`
 - `password` - Hashed password
 - `isEmailConfirmed` - Email confirmation status
 - `emailConfirmationToken` - Email confirmation token
+- `emailConfirmationTokenExpiry` - Token expiry timestamp
+- `createdAt` - Account creation timestamp
 
 ## Import/Export Format
 
 ### Products Excel Format
 
 Required columns:
-
 - `Name` - Product name
+- `Brand` - Brand name (optional)
 - `Net Volume` - Volume information
 - `Vintage` - Vintage year
-- `Type` - Wine type
+- `Wine Type` - Type of wine/beverage
 - `Sugar Content` - Sugar content
 - `Appellation` - Appellation
+- `Alcohol Content` - Alcohol percentage
+- `Packaging Gases` - Packaging gases used
+- `Portion Size` - Serving portion size
+- `Kcal` - Calories per portion
+- `Kj` - Kilojoules per portion
+- `Fat` - Fat content
+- `Carbohydrates` - Carbohydrate content
+- `Organic` - Organic status (true/false)
+- `Vegetarian` - Vegetarian status (true/false)
+- `Vegan` - Vegan status (true/false)
+- `Operator Type` - Type of food business operator
+- `Operator Name` - Name of the operator
+- `Operator Address` - Operator's address
+- `Operator Info` - Additional operator information
+- `Country of Origin` - Country of origin
 - `SKU` - Stock keeping unit
+- `EAN` - European Article Number
+- `External Link` - External product link
+- `Redirect Link` - Redirect URL
 
 ### Ingredients Excel Format
 
 Required columns:
-
 - `Name` - Ingredient name
 - `Category` - Category
 - `E Number` - E-number
