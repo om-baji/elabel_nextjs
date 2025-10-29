@@ -18,6 +18,7 @@ import EditIngredientPage from '@/pages/EditIngredientPage';
 import EditProductPage from '@/pages/EditProductPage';
 import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import NotFound from '@/pages/not-found';
+import PublicProductPage from './pages/PublicProductPage';
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/register" component={RegisterPage} />
       <Route path="/auth/callback" component={AuthCallbackPage} />
       <Route path="/reset-password" component={ResetPasswordPage} />
+      <Route path="/qr/product/:id" component={PublicProductPage} />
       <Route path="/products">
         <ProtectedRoute>
           <ProductsPage />
